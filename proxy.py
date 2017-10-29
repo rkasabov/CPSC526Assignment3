@@ -1,4 +1,15 @@
-import socketserver
+# Authors: Rumen Kasabov, Michael Radke
+# CPSC526 - Assignment 3
+
+########################################
+########################################
+# Proxy server program that creates a tunnel between two connections where data is exchanged with the potential
+# for manipulation of the data (for reasons such as MITM attacks).
+# Current allows for several different logging options of the data, as well as replacing requested strings of data.
+# Logging and replacing is only on server side.
+########################################
+########################################
+
 import socket
 import sys
 import datetime
@@ -8,7 +19,7 @@ import re
 
 log_commands = ["-raw", "-strip", "-hex"]
 
-
+# Thread function that handles tunnel connection between the source and destination addresses
 def connection_handler(client_socket, destination_socket, log_option, n_bytes, replace_option, option_one, option_two):
 
     inputs = [client_socket, destination_socket]
@@ -46,12 +57,14 @@ def connection_handler(client_socket, destination_socket, log_option, n_bytes, r
 
                     message = log_data(log_option, modified_data, n_bytes)
 
-                counter = 0
-                while counter < len(message):
+                    counter = 0
+                    while counter < len(message):
 
-                    print("<--- " + str(message[counter]) + "\n")
+                        print("<--- " + str(message[counter]) + "\n")
 
-                    counter += 1
+                        counter += 1
+
+                client_socket.sendall(data)
 
             # Otherwise send data from client to the destination
             else:
@@ -67,13 +80,13 @@ def connection_handler(client_socket, destination_socket, log_option, n_bytes, r
 
                     message = log_data(log_option, modified_data, n_bytes)
 
-                # Send the source message host to the destination
-                counter = 0
-                while counter < len(message):
+                    # Send the source message host to the destination
+                    counter = 0
+                    while counter < len(message):
 
-                    print("---> " + str(message[counter]) + "\n")
+                        print("---> " + str(message[counter]) + "\n")
 
-                    counter += 1
+                        counter += 1
 
                 destination_socket.sendall(data)
 
@@ -86,7 +99,9 @@ def log_data(log_option, data, n_bytes):
     # Do nothing, option is raw
     if log_option == "-raw":
 
-        return data
+        message = data.split("\n")
+
+        return message
 
     # Strip non-printable characters and replace them with dots
     elif log_option == "-strip":
@@ -251,6 +266,7 @@ def replace_data(option_one, option_two, data):
 
     return data
 
+
 if __name__ == "__main__":
 
     # Initialize localhost, server, and port variables
@@ -304,7 +320,7 @@ if __name__ == "__main__":
         server = sys.argv[6]
         dstPort = sys.argv[7]
 
-    # Else if 7, log option is excluded
+    # Else if 7 arguments provided, log option is excluded
     elif len(sys.argv) == 7:
 
         replace_option = sys.argv[1]
@@ -318,9 +334,7 @@ if __name__ == "__main__":
             print("Please provide a correct replace argument: '-replace'.\n")
             quit()
 
-        print(replace_option + "\n")
-
-    # Else if 5, replace option excluded
+    # Else if 5 arguments provided, replace option excluded
     elif len(sys.argv) == 5:
 
         log_option = sys.argv[1]
@@ -364,7 +378,7 @@ if __name__ == "__main__":
     # Otherwise, wrong amount of arguments has been provided,
     # indicate error and quit the program
     else:
-        print("USAGE: 'python proxy.py [logOptions] [replaceOptions] [optionOne] [optionTwo] srcPort server dstPort'")
+        print("USAGE: 'python proxy.py [logOptions] -replace [optionOne] [optionTwo] srcPort server dstPort'")
         quit()
 
     # Create a server socket that will connect to the source client we are obtaining data from
