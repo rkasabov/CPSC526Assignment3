@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1990c14-4728-4d65-92b2-5a7cd30efaa5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.docx" afterPath="$PROJECT_DIR$/README.docx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proxy.py" afterPath="$PROJECT_DIR$/proxy.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,8 +20,8 @@
       <file leaf-file-name="proxy.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/proxy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+            <state relative-caret-position="-6220">
+              <caret line="114" column="0" lean-forward="true" selection-start-line="114" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
               <folding>
                 <element signature="e#574#587#0" expanded="true" />
               </folding>
@@ -252,8 +253,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/proxy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+        <state relative-caret-position="-6220">
+          <caret line="114" column="0" lean-forward="true" selection-start-line="114" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
           <folding>
             <element signature="e#574#587#0" expanded="true" />
           </folding>

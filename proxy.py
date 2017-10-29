@@ -99,6 +99,7 @@ def log_data(log_option, data, n_bytes):
     # Do nothing, option is raw
     if log_option == "-raw":
 
+        # Split newlines
         message = data.split("\n")
 
         return message
@@ -112,7 +113,9 @@ def log_data(log_option, data, n_bytes):
         # We consider anything below 32 and above 126 non printable
         data = re.sub(r'[^\x20-\x7E]', '.', data)
 
-        message.append(data)
+        # Split newlines
+        message = data.split("\n")
+
         return message
 
     elif log_option == "-hex":
@@ -365,8 +368,6 @@ if __name__ == "__main__":
         srcPort = sys.argv[2]
         server = sys.argv[3]
         dstPort = sys.argv[4]
-
-        print(log_option + "\n")
 
     # Else if 4, no replacement options or logging options have been provided
     elif len(sys.argv) == 4:
