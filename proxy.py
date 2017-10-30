@@ -57,6 +57,7 @@ def connection_handler(client_socket, destination_socket, log_option, n_bytes, r
 
                     message = log_data(log_option, modified_data, n_bytes)
 
+                    # Loop through the message array, printing each line of data to terminal
                     counter = 0
                     while counter < len(message):
 
@@ -80,7 +81,7 @@ def connection_handler(client_socket, destination_socket, log_option, n_bytes, r
 
                     message = log_data(log_option, modified_data, n_bytes)
 
-                    # Send the source message host to the destination
+                    # Send the source message
                     counter = 0
                     while counter < len(message):
 
@@ -186,8 +187,7 @@ def log_data(log_option, data, n_bytes):
         # Total amount of bytes read from the data
         total_read = 0
 
-        # Loop 16 characters at a through data, printing input offset, hex values of each char, and the chars themselves
-        # (Equivalent to hexdump -C command in linux)
+        # Loop through the data, splitting it into chunks and re-formatting tabs, carriages, newlines and slashes
         while data_length >= 0:
 
             # Initialize data char and hex char variable
@@ -195,18 +195,19 @@ def log_data(log_option, data, n_bytes):
             data_char = ""
 
             counter = 0
+
+            # We loop up to the provided chunk of bytes and format it for each line
             while counter < int(n_bytes):
 
-                # Make sure we don't try to increment to an out of range offset in the data (stop when the length
-                # reaches 0.x
+                # Make sure we don't try to increment to an out of range offset in the data
                 if data_length - counter > 0:
 
                     hex_position = int(hex(ord(data[counter + total_read])), 16)
 
-                    # Get the first character in the data
+                    # If the char is a printable character within the ascii table (32-126) add it without modification
                     if hex_position >= 32 and hex_position <= 126:
 
-                        # If char head position is a
+                        # If it is a backslash, change the output format to \\
                         if hex_position == 92:
 
                             data_char += "\\\\"
@@ -232,6 +233,7 @@ def log_data(log_option, data, n_bytes):
 
                             data_char += "\\r"
 
+                        # Else if its none of the above, get the hexadecimal value of the character and report it as that
                         else:
 
                             hex_char = hex(ord(data[counter + total_read]))
@@ -243,9 +245,11 @@ def log_data(log_option, data, n_bytes):
 
                 counter += 1
 
+            # Add the chunk to the message array
             message.append(data_char)
 
             total_read += int(n_bytes)
+
             # Decrease length of data by N byte chunks on each iteration
             data_length -= int(n_bytes)
 
@@ -391,11 +395,11 @@ if __name__ == "__main__":
     # Listen to incoming messages
     server_socket.listen(5)
 
+    print("Port logger running: srcPort=" + srcPort + " host=" + server + " dstPort=" + dstPort)
+
     # We loop and accept source connections and spawn threads that handle proxy forwarding
     while 1:
         (client_socket, client_address) = server_socket.accept()
-
-        print("Port logger running: srcPort=" + srcPort + " host=" + server + " dstPort=" + dstPort)
 
         # Current time the connection is initiated
         current_time = datetime.datetime.now().time()
